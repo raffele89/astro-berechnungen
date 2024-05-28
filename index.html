@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrologische Berechnungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Astrologische Berechnungen</h1>
+    <p>Bitte füllen Sie das Formular aus, um Ihre astrologischen Daten zu berechnen.</p>
+    <!-- Google Form Einbettungscode -->
+    <iframe src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true" width="640" height="480" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
+    <div id="results"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Eventlistener für das Formular
+            // Dies ist ein vereinfachtes Beispiel, um die Daten an das Backend zu senden
+            document.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = {
+                    birth_date: formData.get('Geburtsdatum'),
+                    birth_time: formData.get('Geburtszeit'),
+                    birth_place: formData.get('Geburtsort')
+                };
+
+                fetch('https://deine-webseite.com/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = '<h2>Astrologische Ergebnisse</h2>';
+                    for (const planet in result) {
+                        resultsDiv.innerHTML += `<p>${planet}: ${result[planet]}°</p>`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>
